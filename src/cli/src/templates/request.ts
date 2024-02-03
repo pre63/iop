@@ -14,7 +14,7 @@ module Request exposing
 -}
 
 import Browser.Navigation exposing (Key)
-import ElmSpa.Request as ElmSpa
+import Iop.Request as Iop
 import Gen.Route as Route exposing (Route)
 import Url exposing (Url)
 
@@ -24,12 +24,12 @@ type alias Request =
 
 
 type alias With params =
-    ElmSpa.Request Route params
+    Iop.Request Route params
 
 
 create : params -> Url -> Key -> With params
 create params url key =
-    ElmSpa.create (Route.fromUrl url) params url key
+    Iop.create (Route.fromUrl url) params url key
 
 
 pushRoute : Route -> With params -> Cmd msg

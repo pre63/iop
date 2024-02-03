@@ -13,7 +13,7 @@ const green = (str: string) => '\x1b[32m' + str + '\x1b[0m'
 const yellow = (str: string) => '\x1b[33m' + str + '\x1b[0m'
 const pink = (str: string) => '\x1b[35m' + str + '\x1b[0m'
 
-// Scaffold a new elm-spa page
+// Scaffold a new iop page
 export default {
   run: async () => {
     let [ url, template ] = process.argv.slice(3)
@@ -39,32 +39,32 @@ export default {
 }
 
 const example = '  ' + `
-  ${bold(`elm-spa add`)} <url> [template]
+  ${bold(`iop add`)} <url> [template]
 
   Examples:
-  ${bold(`elm-spa ${cyan(`add`)}`)} ${yellow('/')} . . . . . . . . adds a homepage
-  ${bold(`elm-spa ${cyan(`add`)}`)} ${yellow('/about-us')} . . . . adds a static route
-  ${bold(`elm-spa ${cyan(`add`)}`)} ${yellow('/people/:id')} . . . adds a dynamic route
+  ${bold(`iop ${cyan(`add`)}`)} ${yellow('/')} . . . . . . . . adds a homepage
+  ${bold(`iop ${cyan(`add`)}`)} ${yellow('/about-us')} . . . . adds a static route
+  ${bold(`iop ${cyan(`add`)}`)} ${yellow('/people/:id')} . . . adds a dynamic route
 
   Examples with templates:
-  ${bold(`elm-spa ${cyan(`add`)}`)} ${yellow('/')} ${pink('static')}
-  ${bold(`elm-spa ${cyan(`add`)}`)} ${yellow('/about-us')} ${pink('sandbox')}
-  ${bold(`elm-spa ${cyan(`add`)}`)} ${yellow('/people/:id')} ${pink('element')}
+  ${bold(`iop ${cyan(`add`)}`)} ${yellow('/')} ${pink('static')}
+  ${bold(`iop ${cyan(`add`)}`)} ${yellow('/about-us')} ${pink('sandbox')}
+  ${bold(`iop ${cyan(`add`)}`)} ${yellow('/people/:id')} ${pink('element')}
 
-  Visit ${green(`https://elm-spa.dev/guide/01-cli`)} for more details!
+  Visit ${green(`https://iop.dev/guide/01-cli`)} for more details!
 `.trim()
 
 const template404 = (url : string, template : string, suggestions: string[]) => {
   const suggest = `
   Here are the available templates:
 
-    ${suggestions.map(temp => `${yellow(`elm-spa add`)} ${yellow(url)} ${bold(pink(temp))}`).join('\n    ')}
+    ${suggestions.map(temp => `${yellow(`iop add`)} ${yellow(url)} ${bold(pink(temp))}`).join('\n    ')}
   `
 
   return '  ' + `
-  ${bold(`elm-spa`)} couldn't find a ${bold(pink(template))} template
-  in the ${cyan('.elm-spa/templates')} folder.
+  ${bold(`iop`)} couldn't find a ${bold(pink(template))} template
+  in the ${cyan('.iop/templates')} folder.
   ${suggestions.length ? suggest : ''}
-  Visit ${green(`https://elm-spa.dev/guide/01-cli`)} for more details!
+  Visit ${green(`https://iop.dev/guide/01-cli`)} for more details!
 
 `.trim()}

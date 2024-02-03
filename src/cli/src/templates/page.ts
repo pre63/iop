@@ -15,7 +15,7 @@ module Page exposing
 
 import Auth exposing (User)
 import Effect exposing (Effect)
-import ElmSpa.Page as ElmSpa
+import Iop.Page as Iop
 import Gen.Route exposing (Route)
 import Request exposing (Request)
 import Shared
@@ -31,7 +31,7 @@ type alias Page =
 
 
 type alias With model msg =
-    ElmSpa.Page Shared.Model Route (Effect msg) (View msg) model msg
+    Iop.Page Shared.Model Route (Effect msg) (View msg) model msg
 
 
 static :
@@ -39,7 +39,7 @@ static :
     }
     -> Page
 static =
-    ElmSpa.static Effect.none
+    Iop.static Effect.none
 
 
 sandbox :
@@ -49,7 +49,7 @@ sandbox :
     }
     -> With model msg
 sandbox =
-    ElmSpa.sandbox Effect.none
+    Iop.sandbox Effect.none
 
 
 element :
@@ -60,7 +60,7 @@ element :
     }
     -> With model msg
 element =
-    ElmSpa.element Effect.fromCmd
+    Iop.element Effect.fromCmd
 
 
 advanced :
@@ -71,7 +71,7 @@ advanced :
     }
     -> With model msg
 advanced =
-    ElmSpa.advanced
+    Iop.advanced
 
 
 
@@ -117,7 +117,7 @@ protected :
         -> With model msg
     }
 protected =
-    ElmSpa.protected
+    Iop.protected
         { effectNone = Effect.none
         , fromCmd = Effect.fromCmd
         , beforeInit = Auth.beforeProtectedInit

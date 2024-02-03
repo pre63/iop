@@ -23,7 +23,7 @@ export const build = ({ env, runElmMake } : { env : Environment, runElmMake: boo
     createMissingAddTemplates()
   ])
     .then(createGeneratedFiles)
-    .then(runElmMake ? compileMainElm(env): _ => `  ${check} ${bold}elm-spa${reset} generated new files.`)
+    .then(runElmMake ? compileMainElm(env): _ => `  ${check} ${bold}iop${reset} generated new files.`)
 
 const createMissingDefaultFiles = async () => {
   type Action
@@ -92,13 +92,13 @@ const invalidExportsMessage = (entry: PageEntry) => {
   return [
     `${colors.RED}!${reset} Ran into a problem at ${bold}${colors.yellow}src/Pages/${entry.segments.join('/')}.elm${reset}`,
     ``,
-    `${bold}elm-spa${reset} expected one of these module definitions:`,
+    `${bold}iop${reset} expected one of these module definitions:`,
     ``,
     `  ${dot} module ${moduleName} exposing (${cyan('view')})`,
     `  ${dot} module ${moduleName} exposing (${cyan('page')})`,
     `  ${dot} module ${moduleName} exposing (${cyan('Model')}, ${cyan('Msg')}, ${cyan('page')})`,
     ``,
-    `Visit ${colors.green}https://elm-spa.dev/guide/03-pages${reset} for more details!`
+    `Visit ${colors.green}https://iop.dev/guide/03-pages${reset} for more details!`
   ].join('\n')
 }
 
@@ -181,13 +181,13 @@ const compileMainElm = (env: Environment) => async () => {
       catch {
         const { RED, green } = colors
         return Promise.reject([
-          `${RED}!${reset} elm-spa failed to understand an error`,
-          `Please report the output below to ${green}https://github.com/ryannhg/elm-spa/issues${reset}`,
+          `${RED}!${reset} iop failed to understand an error`,
+          `Please report the output below to ${green}https://github.com/ryannhg/iop/issues${reset}`,
           `-----`,
           JSON.stringify(error, null, 2),
           `-----`,
-          `${RED}!${reset} elm-spa failed to understand an error`,
-          `Please send the output above to ${green}https://github.com/ryannhg/elm-spa/issues${reset}`,
+          `${RED}!${reset} iop failed to understand an error`,
+          `Please send the output above to ${green}https://github.com/ryannhg/iop/issues${reset}`,
           ``
         ].join('\n\n'))
       }

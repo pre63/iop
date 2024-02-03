@@ -5,7 +5,7 @@ import * as File from '../file'
 import { bold, check, colors, dim, dot, reset, warn } from "../terminal"
 import { createInterface } from "readline"
 
-// Scaffold a new elm-spa project
+// Scaffold a new iop project
 export default {
   run: async () => {
     return new Promise(offerToInitializeProject)

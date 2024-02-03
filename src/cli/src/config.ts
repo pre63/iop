@@ -16,18 +16,18 @@ const config = {
     src: path.join(cwd, 'src'),
     pages: {
       src: path.join(cwd, 'src', 'Pages'),
-      defaults: path.join(cwd, '.elm-spa', 'defaults', 'Pages')
+      defaults: path.join(cwd, '.iop', 'defaults', 'Pages')
     },
     defaults: {
       src: path.join(root, 'src', 'defaults'),
-      dest: path.join(cwd, '.elm-spa', 'defaults')
+      dest: path.join(cwd, '.iop', 'defaults')
     },
     generated: path.join(cwd, 'src'),
     templates: {
       defaults: path.join(root, 'src', 'templates', 'add'),
-      user: path.join(cwd, '.elm-spa', 'templates')
+      user: path.join(cwd, '.iop', 'templates')
     },
-    package: path.join(cwd, '.elm-spa', 'package'),
+    package: path.join(cwd, '.iop', 'package'),
     public: path.join(cwd, 'public'),
     dist: path.join(cwd, 'public', 'dist'),
   },

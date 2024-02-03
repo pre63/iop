@@ -1,9 +1,9 @@
-# [![elm-spa](https://v6.elm-spa.dev/images/rounded-logo-bg.png)](https://elm-spa.dev)
+# iop is a [![elm-spa](https://v6.elm-spa.dev/images/rounded-logo-bg.png)](https://elm-spa.dev) fork
 
 # **Installation**
 
 ```bash
-npm install -g elm-spa@latest
+npm install -g iop@latest
 ```
 
 # **Quick start**
@@ -11,7 +11,7 @@ npm install -g elm-spa@latest
 ## **1. Create a new project**
 
 ```bash
-npx elm-spa new
+npx iop new
 ```
 
 ## **2. Check out the new files**
@@ -26,7 +26,7 @@ your-new-project/
 ## **3. Run it in your browser**
 
 ```bash
-npx elm-spa server   # Ready at http://localhost:1234
+npx iop server   # Ready at http://localhost:1234
 ```
 
 # **Learn more**

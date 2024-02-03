@@ -10,7 +10,7 @@ module Auth exposing
 
 -}
 
-import ElmSpa.Page as ElmSpa
+import Iop.Page as Iop
 import Gen.Route exposing (Route)
 import Request exposing (Request)
 import Shared
@@ -28,12 +28,12 @@ Here, you can provide logic on where to redirect if a user is not signed in. Her
 
     case shared.user of
         Just user ->
-            ElmSpa.Provide user
+            Iop.Provide user
 
         Nothing ->
-            ElmSpa.RedirectTo Gen.Route.SignIn
+            Iop.RedirectTo Gen.Route.SignIn
 
 -}
-beforeProtectedInit : Shared.Model -> Request -> ElmSpa.Protected User Route
+beforeProtectedInit : Shared.Model -> Request -> Iop.Protected User Route
 beforeProtectedInit shared req =
-    ElmSpa.RedirectTo Gen.Route.NotFound
+    Iop.RedirectTo Gen.Route.NotFound

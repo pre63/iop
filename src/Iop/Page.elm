@@ -1,4 +1,4 @@
-module ElmSpa.Page exposing
+module Iop.Page exposing
     ( Page, static, sandbox, element, advanced
     , Protected(..), protected
     , Bundle, bundle
@@ -24,11 +24,11 @@ module ElmSpa.Page exposing
 -}
 
 import Browser.Navigation exposing (Key)
-import ElmSpa.Request
+import Iop.Request
 import Url exposing (Url)
 
 
-{-| Pages are the building blocks of **elm-spa**.
+{-| Pages are the building blocks of **iop**.
 
 Instead of importing this module, your project will have a `Page` module with a much simpler type:
 
@@ -273,7 +273,7 @@ protected options =
 
 
 type alias Request route params =
-    ElmSpa.Request.Request route params
+    Iop.Request.Request route params
 
 
 {-| A convenient function for use within generated code. Makes it easy to handle `init`, `update`, `view`, and `subscriptions` for each page!
@@ -288,7 +288,7 @@ type alias Bundle params model msg shared effect pagesModel pagesMsg pagesView =
 
 {-| This function is used by the generated code to connect your pages together.
 
-It's big, spooky, and makes writing **elm-spa** pages really nice!
+It's big, spooky, and makes writing **iop** pages really nice!
 
 -}
 bundle :
@@ -308,7 +308,7 @@ bundle { redirecting, toRoute, toUrl, fromCmd, mapEffect, mapView, page, toModel
         \params shared url key ->
             let
                 req =
-                    ElmSpa.Request.create (toRoute url) params url key
+                    Iop.Request.create (toRoute url) params url key
             in
             case toResult page shared req of
                 Ok record ->
@@ -321,7 +321,7 @@ bundle { redirecting, toRoute, toUrl, fromCmd, mapEffect, mapView, page, toModel
         \params msg model shared url key ->
             let
                 req =
-                    ElmSpa.Request.create (toRoute url) params url key
+                    Iop.Request.create (toRoute url) params url key
             in
             case toResult page shared req of
                 Ok record ->
@@ -334,7 +334,7 @@ bundle { redirecting, toRoute, toUrl, fromCmd, mapEffect, mapView, page, toModel
         \params model shared url key ->
             let
                 req =
-                    ElmSpa.Request.create (toRoute url) params url key
+                    Iop.Request.create (toRoute url) params url key
             in
             case toResult page shared req of
                 Ok record ->
@@ -347,7 +347,7 @@ bundle { redirecting, toRoute, toUrl, fromCmd, mapEffect, mapView, page, toModel
         \params model shared url key ->
             let
                 req =
-                    ElmSpa.Request.create (toRoute url) params url key
+                    Iop.Request.create (toRoute url) params url key
             in
             case toResult page shared req of
                 Ok record ->
@@ -369,7 +369,7 @@ toResult toPage shared req =
         (Page toResult_) =
             toPage shared req
     in
-    toResult_ shared (ElmSpa.Request.create req.route () req.url req.key)
+    toResult_ shared (Iop.Request.create req.route () req.url req.key)
 
 
 

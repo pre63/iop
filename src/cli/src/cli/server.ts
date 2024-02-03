@@ -50,10 +50,10 @@ const start = async () => new Promise((resolve, reject) => {
   // Websockets for live-reloading
   const connections : { [key: string]: connection } = {}
   const ws = new websocket.server({ httpServer: server })
-  const script = ` new WebSocket('ws://' + window.location.host, 'elm-spa').onmessage = function () { window.location.reload() } `
+  const script = ` new WebSocket('ws://' + window.location.host, 'iop').onmessage = function () { window.location.reload() } `
   ws.on('request', (req) => {
     try {
-      const conn = req.accept('elm-spa', req.origin)
+      const conn = req.accept('iop', req.origin)
       connections[req.remoteAddress] = conn
       conn.on('close', () => delete connections[conn.remoteAddress])
     } catch (_) { /* Safely ignores unknown requests */ }

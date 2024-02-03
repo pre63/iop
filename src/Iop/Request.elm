@@ -1,4 +1,4 @@
-module ElmSpa.Request exposing (Request, create)
+module Iop.Request exposing (Request, create)
 
 {-|
 
@@ -6,7 +6,7 @@ module ElmSpa.Request exposing (Request, create)
 # **( These docs are for CLI contributors )**
 
 
-### If you are using **elm-spa**, check out [the official guide](https://elm-spa.dev/guide) instead!
+### If you are using **iop**, check out [the official guide](https://iop.dev/guide) instead!
 
 ---
 
@@ -68,7 +68,7 @@ type alias Request route params =
     }
 
 
-{-| A convenience function for creating requests, used by elm-spa internally.
+{-| A convenience function for creating requests, used by iop internally.
 
     request : Request Route { name : String }
     request =
