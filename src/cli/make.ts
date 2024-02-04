@@ -1,5 +1,4 @@
 import path from "path"
-import { exists } from "../file"
 import config from '../config'
 import * as File from '../file'
 import { createInterface } from 'readline'
@@ -15,12 +14,12 @@ import { isStandardPage, isStaticPage, isStaticView, options, PageKind } from ".
 import { createMissingAddTemplates } from "./_common"
 const elm = require('node-elm-compiler')
 
-export const build = ({ env, runElmMake }: { env: Environment, runElmMake: boolean }) => () =>
+export const make = ({ env, runElmMake }: { env: Environment, runElmMake: boolean }) => () =>
   Promise.all([
     createMissingAddTemplates()
   ])
     .then(createGeneratedFiles)
-    .then(runElmMake ? compileMainElm(env) : _ => `  ${check} ${bold}iop${reset} generated new files.`)
+    .then(runElmMake ? compileMainElm(env) : _ => `  ${check} ${bold}iop${reset} generated init files.`)
 
 type FilepathSegments = {
   kind: PageKind,
@@ -219,7 +218,7 @@ const compileMainElm = (env: Environment) => async () => {
     return Promise.reject(errors.map(err => errorToString(err)).join('\n\n\n'))
   }
 
-  const success = () => `${check} Build successful! ${dim}(${Date.now() - start}ms)${reset}`
+  const success = () => `${check} Make successful! ${dim}(${Date.now() - start}ms)${reset}`
 
   const minify = (rawCode: string) =>
     terser.minify(rawCode, { compress: { pure_funcs: `F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9`.split(','), pure_getters: true, keep_fargs: false, unsafe_comps: true, unsafe: true } })
@@ -282,6 +281,6 @@ const offerToInstallForDeveloper = (resolve: (value: unknown) => void, reject: (
 }
 
 export default {
-  build: build({ env: 'production', runElmMake: true }),
-  gen: build({ env: 'production', runElmMake: false })
+  make: make({ env: 'production', runElmMake: true }),
+  gen: make({ env: 'production', runElmMake: false })
 }

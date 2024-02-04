@@ -1,5 +1,4 @@
 import path from "path"
-import fs from "fs"
 import config from "../config"
 import * as File from '../file'
 import { urlArgumentToPages } from "../templates/utils"

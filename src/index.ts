@@ -4,16 +4,13 @@ import CLI from './cli'
 import { Commands } from './types'
 
 const commands : Commands = {
-  new: CLI.new,
+  init: CLI.init,
   add: CLI.add,
-  build: CLI.build,
+  make: CLI.make,
   gen: CLI.gen,
   watch: CLI.watch,
-  server: CLI.server,
+  dev: CLI.dev,
   help: CLI.help,
-  // Aliases for Elm folks
-  init: CLI.new,
-  make: CLI.build,
 }
 
 const command : string | undefined = process.argv[2]

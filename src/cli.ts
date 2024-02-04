@@ -1,19 +1,16 @@
-import New from './cli/init'
+import Init from './cli/init'
 import Add from './cli/add'
-import Build from './cli/build'
+import Make from './cli/make'
 import Watch from './cli/watch'
-import Server from './cli/server'
+import Dev from './cli/dev'
 import Help from './cli/help'
 
 export default {
-  new: New.run,
   add: Add.run,
-  build: Build.build,
-  server: Server.run,
-  gen: Build.gen,
+  dev: Dev.run,
+  gen: Make.gen,
   watch: Watch.run,
   help: Help.run,
-  // Aliases for Elm folks
-  init: New.run,
-  make: Build.build,
+  init: Init.run,
+  make: Make.make,
 }

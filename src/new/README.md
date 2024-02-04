@@ -1,24 +1,27 @@
-# my new project
+# My New Iop Project
 > 🌳  built with iop
 
-## dependencies
+## Dependencies
 
 This project requires the latest LTS version of [Node.js](https://nodejs.org/)
 
 ```bash
-npm install -g elm iop
+git clone https://github.com/pre63/iop.git
+cd iop
+npm install
+npm run local
 ```
 
-## running locally
+## Running locally
 
 ```bash
-iop server  # starts this app at http:/localhost:1234
+iop dev    # starts this app at http:/localhost:1234
 ```
 
-### other commands
+### Other commands
 
 ```bash
-iop add    # add a new page to the application
-iop build  # production build
-iop watch  # runs build as you code (without the server)
+iop add     # add a new page to the application
+iop make    # production make
+iop watch   # runs make as you code (without the server)
 ```

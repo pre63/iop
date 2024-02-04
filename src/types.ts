@@ -1,12 +1,9 @@
 export type Commands = {
-  new: () => any
+  init: () => any
   add: () => any
-  build: () => any
+  make: () => any
   gen: () => any
   watch: () => any
-  server: () => any
+  dev: () => any
   help: () => any
-  // Aliases for Elm folks
-  init: () => any
-  make: () => any
 }

@@ -1,6 +1,6 @@
 import chokidar from 'chokidar'
 import config from '../config'
-import { build } from './build'
+import { make } from './make'
 
 function debounce<F extends (...args: any[]) => void>(func: F, waitFor: number): (...args: Parameters<F>) => void {
   let timeoutId: ReturnType<typeof setTimeout> | null = null
@@ -14,7 +14,7 @@ function debounce<F extends (...args: any[]) => void>(func: F, waitFor: number):
 }
 
 export const watch = (runElmMake: boolean) => {
-  const runBuild = build({ env: 'development', runElmMake })
+  const runBuild = make({ env: 'development', runElmMake })
 
   const debouncedRunBuild = debounce(() => {
     runBuild()

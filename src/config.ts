@@ -21,20 +21,12 @@ const config = {
     generated: path.join(cwd, 'src', 'Iop'),
     templates: {
       defaults: path.join(root, 'src', 'templates', 'add'),
-      user: path.join(cwd, '.iop', 'templates')
+      user: path.join(cwd, '.iop')
     },
     package: path.join(cwd, '.iop', 'package'),
     public: path.join(cwd, 'public'),
     dist: path.join(cwd, 'public', 'dist'),
-  },
-  defaults: [
-    [ 'Auth.elm' ],
-    [ 'Effect.elm' ],
-    [ 'Main.elm' ],
-    [ 'Shared.elm' ],
-    [ `Pages`, `${reserved.notFound}.elm` ],
-    [ 'View.elm' ]
-  ]
+  }
 }
 
 export default config

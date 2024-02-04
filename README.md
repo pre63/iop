@@ -38,14 +38,14 @@ $ iop help
 iop – version 0.0.9
 
 Commands:
-  iop new . . . . . . . . .  create a new project
-  iop add <url> . . . . . . . . create a new page
-  iop build . . . . . . one-time production build
-  iop server  . . . . . . start a live dev server
+  iop init  . . . . . . . . . . create a new project
+  iop add <url>  . . . . . . . . . create a new page
+  iop make  . . . . . . . . one-time production make
+  iop dev  . . . . . . . . . start a live dev server
 
 Other commands:
-  iop gen . . . . generates code without elm make
-  iop watch . . . .  runs iop gen as you code
+  iop gen  . . . . . generates code without elm make
+  iop watch . . . . . . . . runs iop gen as you code
 ```
 
 ## Contributing
@@ -60,7 +60,7 @@ npm install                         # Initialize development setup
 For development and testing:
 
 ```bash
-npm run build   # For one-time production build
+npm run make   # For one-time production build
 ```
 
 ### Local CLI Testing
