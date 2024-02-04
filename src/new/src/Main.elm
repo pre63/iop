@@ -3,9 +3,9 @@ module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav exposing (Key)
 import Effect
-import Gen.Model
-import Gen.Pages as Pages
-import Gen.Route as Route
+import Iop.Gen.Model
+import Iop.Gen.Pages as Pages
+import Iop.Gen.Route as Route
 import Request
 import Shared
 import Url exposing (Url)
@@ -98,7 +98,7 @@ update msg model =
                 ( page, effect ) =
                     Pages.init (Route.fromUrl model.url) shared model.url model.key
             in
-            if page == Gen.Model.Redirecting_ then
+            if page == Iop.Gen.Model.Redirecting_ then
                 ( { model | shared = shared, page = page }
                 , Cmd.batch
                     [ Cmd.map Shared sharedCmd

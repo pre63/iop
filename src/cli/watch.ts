@@ -33,7 +33,7 @@ export const watch = (runElmMake: boolean) => {
   chokidar
     .watch(config.folders.src, {
       ignoreInitial: true,
-      ignored: [`${config.folders.src}/Gen`, `${config.folders.src}/Gen/**/*`]
+      ignored: [`${config.folders.src}/Iop/Gen`, `${config.folders.src}/Iop/Gen/**/*`]
     })
     .on('all', () => debouncedRunBuild())
 

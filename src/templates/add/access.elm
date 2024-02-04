@@ -7,30 +7,44 @@ import Request
 import Shared
 import View exposing (View)
 import Page
+import Auth
 
 
 page : Shared.Model -> Request.With Params -> Page.With Model Msg
 page shared req =
-    Page.advanced
-        { init = init
-        , update = update
-        , view = view
-        , subscriptions = subscriptions
-        }
+    Page.protected.access
+        (\user ->
+            { init = init user req.params
+            , update = update
+            , view = view
+            , layout = layout
+            , access = Nothing
+            , subscriptions = subscriptions
+            }
+        )
 
+
+layout : (Model -> View Msg) -> Model -> View Msg
+layout toView model_ =
+    toView model_
 
 
 -- INIT
 
 
 type alias Model =
-    {}
+    { user : Auth.User
+    , params : Params
+    }
 
 
-init : ( Model, Effect Msg )
-init =
-    ( {}, Effect.none )
-
+init : Auth.User -> Params -> ( Model, Effect Msg )
+init user params =
+    ( { user = user
+      , params = params
+      }
+    , Effect.none
+    )
 
 
 -- UPDATE

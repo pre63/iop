@@ -18,7 +18,7 @@ const generateHash = (contents: string) => {
  * @param contents - the raw string contents of the file
  */
 export const create = async (filepath: string, contents: string) => {
-  if (filepath.endsWith('.elm')) {
+  if (filepath.endsWith('.elm') && filepath.indexOf('Iop/Gen') > -1) {
     const hash = generateHash(contents)
     const newContents = `{- ${hash} -}\n${contents}`
 
@@ -38,7 +38,7 @@ export const create = async (filepath: string, contents: string) => {
     }
   }
   else {
-    console.log(`Iop init/update: ${filepath}`)
+    console.log(`Iop gen: ${filepath}`)
     await ensureFolderExists(filepath)
     await fs.writeFile(filepath, contents, { encoding: 'utf8' })
   }

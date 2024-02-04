@@ -7,8 +7,10 @@ module Shared exposing
     , update
     )
 
+import Iop.Auth as Auth
 import Json.Decode as Json
 import Request exposing (Request)
+
 
 
 type alias Flags =
@@ -16,7 +18,8 @@ type alias Flags =
 
 
 type alias Model =
-    {}
+    { user : Maybe Auth.User
+    }
 
 
 type Msg
@@ -25,7 +28,11 @@ type Msg
 
 init : Request -> Flags -> ( Model, Cmd Msg )
 init _ _ =
-    ( {}, Cmd.none )
+    ( { user = Nothing
+      }
+    , Cmd.none
+    )
+
 
 
 update : Request -> Msg -> Model -> ( Model, Cmd Msg )

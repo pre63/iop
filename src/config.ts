@@ -16,13 +16,9 @@ const config = {
     src: path.join(cwd, 'src'),
     pages: {
       src: path.join(cwd, 'src', 'Pages'),
-      defaults: path.join(cwd, '.iop', 'defaults', 'Pages')
+      defaults: path.join(cwd, 'Pages')
     },
-    defaults: {
-      src: path.join(root, 'src', 'defaults'),
-      dest: path.join(cwd, '.iop', 'defaults')
-    },
-    generated: path.join(cwd, 'src'),
+    generated: path.join(cwd, 'src', 'Iop'),
     templates: {
       defaults: path.join(root, 'src', 'templates', 'add'),
       user: path.join(cwd, '.iop', 'templates')

@@ -1,8 +1,8 @@
-export default (): string => `
 module Page exposing
     ( Page, With
     , static, sandbox, element, advanced
     , protected
+    , layout
     )
 
 {-|
@@ -15,8 +15,8 @@ module Page exposing
 
 import Auth exposing (User)
 import Effect exposing (Effect)
+import Iop.Gen.Route exposing (Route)
 import Iop.Page as Iop
-import Gen.Route exposing (Route)
 import Request exposing (Request)
 import Shared
 import View exposing (View)
@@ -74,6 +74,18 @@ advanced =
     Iop.advanced
 
 
+layout :
+    { init : ( model, Effect msg )
+    , update : msg -> model -> ( model, Effect msg )
+    , view : model -> View msg
+    , layout : (model -> View msg) -> model -> View msg
+    , subscriptions : model -> Sub msg
+    }
+    -> With model msg
+layout =
+    Iop.layout
+
+
 
 -- PROTECTED PAGES
 
@@ -81,14 +93,14 @@ advanced =
 protected :
     { static :
         (User
-            ->
+         ->
             { view : View msg
             }
         )
         -> With () msg
     , sandbox :
         (User
-            ->
+         ->
             { init : model
             , update : msg -> model -> model
             , view : model -> View msg
@@ -97,7 +109,7 @@ protected :
         -> With model msg
     , element :
         (User
-            ->
+         ->
             { init : ( model, Cmd msg )
             , update : msg -> model -> ( model, Cmd msg )
             , view : model -> View msg
@@ -107,10 +119,22 @@ protected :
         -> With model msg
     , advanced :
         (User
-            ->
+         ->
             { init : ( model, Effect msg )
             , update : msg -> model -> ( model, Effect msg )
             , view : model -> View msg
+            , subscriptions : model -> Sub msg
+            }
+        )
+        -> With model msg
+    , access :
+        (User
+         ->
+            { init : ( model, Effect msg )
+            , update : msg -> model -> ( model, Effect msg )
+            , view : model -> View msg
+            , layout : (model -> View msg) -> model -> View msg
+            , access : Maybe ()
             , subscriptions : model -> Sub msg
             }
         )
@@ -121,6 +145,5 @@ protected =
         { effectNone = Effect.none
         , fromCmd = Effect.fromCmd
         , beforeInit = Auth.beforeProtectedInit
+        , init = Auth.init
         }
-
-`.trimLeft()

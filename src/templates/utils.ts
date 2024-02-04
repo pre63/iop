@@ -89,7 +89,7 @@ export const indent = (lines : string, n : number = 1) : string =>
     .map(line => [...Array(n)].map(_ => `    `).join('') + line)
     .join('\n')
 
-// Used by Gen.Route
+// Used by Iop.Gen.Route
 export const routeParameters = (path : string[]) : string => {
   const dynamics = dynamicRouteSegments(path)
 
@@ -169,7 +169,7 @@ export const routeToHrefSegments = (path: string[]) : string => {
 }
 
 export const paramsImports = (paths: string[][]) : string =>
-  paths.map(path => `import Gen.Params.${path.join('.')}`).join('\n')
+  paths.map(path => `import Iop.Gen.Params.${path.join('.')}`).join('\n')
 
 export const pagesImports = (paths: string[][]) : string =>
   paths.map(path => `import ${pageModuleName(path)}`).join('\n')
@@ -227,7 +227,7 @@ const bundleName = (path : string[]) : string =>
   path.map(fromPascalToCamelCase).join('__')
 
 const paramsModule = (path : string[]) =>
-  `Gen.Params.${path.join('.')}`
+  `Iop.Gen.Params.${path.join('.')}`
 
 const params = (path : string[]) =>
   `${paramsModule(path)}.Params`

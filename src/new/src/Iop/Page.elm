@@ -1,9 +1,9 @@
-export default (): string => `
+
 module Iop.Page exposing
-    ( Page, static, sandbox, element, advanced
+    ( Page
     , Protected(..), protected
     , Bundle, bundle
-    , super
+    , Request, advanced, element, layout, sandbox, static
     )
 
 {-|
@@ -11,7 +11,7 @@ module Iop.Page exposing
 
 # **Pages**
 
-@docs Page, static, sandbox, element, advanced
+@docs Page
 
 
 # **User Authentication**
@@ -30,15 +30,16 @@ import Iop.Request
 import Url exposing (Url)
 
 
-{-| Pages are the building blocks of **iop**.
 
-Instead of importing this module, your project will have a 'Page' module with a much simpler type:
+{-| Pages are the building blocks of **elm-spa**.
+
+Instead of importing this module, your project will have a `Page` module with a much simpler type:
 
     module Page exposing (Page, ...)
 
     type Page model msg
 
-This makes all the generic 'route', 'effect', and 'view' arguments disappear!
+This makes all the generic `route`, `effect`, and `view` arguments disappear!
 
 -}
 type Page shared route effect view model msg
@@ -65,12 +66,12 @@ static :
         }
     -> Page shared route effect view () msg
 static none page =
-    Page (\\_ _ -> Ok (adapters.static none page))
+    Page (\_ _ -> Ok (adapters.static none page))
 
 
 {-| A page that can keep track of application state.
 
-( Inspired by ['Browser.sandbox'](https://package.elm-lang.org/packages/elm/browser/latest/Browser#sandbox) )
+( Inspired by [`Browser.sandbox`](https://package.elm-lang.org/packages/elm/browser/latest/Browser#sandbox) )
 
     import Page
 
@@ -96,12 +97,12 @@ sandbox :
         }
     -> Page shared route effect view model msg
 sandbox none page =
-    Page (\\_ _ -> Ok (adapters.sandbox none page))
+    Page (\_ _ -> Ok (adapters.sandbox none page))
 
 
 {-| A page that can handle effects like [HTTP requests or subscriptions](https://guide.elm-lang.org/effects/).
 
-( Inspired by ['Browser.element'](https://package.elm-lang.org/packages/elm/browser/latest/Browser#element) )
+( Inspired by [`Browser.element`](https://package.elm-lang.org/packages/elm/browser/latest/Browser#element) )
 
     import Page
 
@@ -130,10 +131,10 @@ element :
         }
     -> Page shared route effect view model msg
 element fromCmd page =
-    Page (\\_ _ -> Ok (adapters.element fromCmd page))
+    Page (\_ _ -> Ok (adapters.element fromCmd page))
 
 
-{-| A page that can handles **custom** effects like sending a 'Shared.Msg' or other general user-defined effects.
+{-| A page that can handles **custom** effects like sending a `Shared.Msg` or other general user-defined effects.
 
     import Effect
     import Page
@@ -161,7 +162,9 @@ advanced :
     }
     -> Page shared route effect view model msg
 advanced page =
-    Page (\\_ _ -> Ok (adapters.advanced page))
+    Page (\_ _ -> Ok (adapters.advanced page))
+
+
 
 
 {-| A page that can handles **custom** effects like sending a 'Shared.Msg' or other general user-defined effects.
@@ -171,7 +174,7 @@ advanced page =
 
     page : Page Model Msg
     page =
-        Page.advanced
+        Page.layout
             { init = init
             , update = update
             , view = view
@@ -186,7 +189,7 @@ advanced page =
     -- subscriptions : Model -> Sub Msg
 
 -}
-super :
+layout :
     { init : ( model, effect )
     , update : msg -> model -> ( model, effect )
     , view : model -> view
@@ -194,11 +197,11 @@ super :
     , subscriptions : model -> Sub msg
     }
     -> Page shared route effect view model msg
-super page =
-    Page (\\_ _ -> Ok (adapters.advanced <| fromSuper page))
+layout page =
+    Page (\_ _ -> Ok (adapters.advanced <| applyLayout page))
 
 
-fromSuper :
+applyLayout :
     { init : ( model, effect )
     , update : msg -> model -> ( model, effect )
     , view : model -> view
@@ -211,17 +214,17 @@ fromSuper :
         , view : model -> view
         , subscriptions : model -> Sub msg
         }
-fromSuper { init, update, view, layout, subscriptions } =
+applyLayout ({ init, update, view,  subscriptions } as config) =
     { init = init
     , update = update
-    , view = layout view
+    , view = config.layout view
     , subscriptions = subscriptions
     }
 
 
 {-| Actions to take when a user visits a 'protected' page
 
-    import Gen.Route as Route exposing (Route)
+    import Iop.Gen.Route as Route exposing (Route)
 
     beforeProtectedInit : Shared.Model -> Request () -> Protected User Route
     beforeProtectedInit shared _ =
@@ -249,7 +252,7 @@ type Protected user route
 
     -- after
     Page.protected.sandbox
-        (\\user ->
+        (\user ->
             { init = init
             , update = update
             , view = view
@@ -266,7 +269,7 @@ protected :
     { effectNone : effect
     , fromCmd : Cmd msg -> effect
     , beforeInit : shared -> Request route () -> Protected user route
-    , initAcl : List acl -> user -> Protected user route
+    , init : access -> user -> Protected user route
     }
     ->
         { static :
@@ -305,14 +308,14 @@ protected :
                 }
             )
             -> Page shared route effect view model msg
-        , acl :
+        , access :
             (user
              ->
                 { init : ( model, effect )
                 , update : msg -> model -> ( model, effect )
                 , view : model -> view
                 , layout : (model -> view) -> model -> view
-                , acls : List acl
+                , access : access
                 , subscriptions : model -> Sub msg
                 }
             )
@@ -322,7 +325,7 @@ protected options =
     let
         protect toPage toRecord =
             Page
-                (\\shared req ->
+                (\shared req ->
                     case options.beforeInit shared req of
                         Provide user ->
                             Ok (user |> toRecord |> toPage)
@@ -335,13 +338,13 @@ protected options =
     , sandbox = protect (adapters.sandbox options.effectNone)
     , element = protect (adapters.element options.fromCmd)
     , advanced = protect adapters.advanced
-    , acl = protectWithAcl options
+    , access = protectWithAccess options
     }
 
 
 {-| Actions to take when a user visits a 'protected' page
 
-    import Gen.Route as Route exposing (Route)
+    import Iop.Gen.Route as Route exposing (Route)
 
     beforeProtectedInit : Shared.Model -> Request () -> Protected User Route
     beforeProtectedInit shared _ =
@@ -353,11 +356,11 @@ protected options =
                 RedirectTo Route.SignIn
 
 -}
-protectWithAcl :
+protectWithAccess :
     { effectNone : effect
     , fromCmd : Cmd msg -> effect
     , beforeInit : shared -> Request route () -> Protected user route
-    , initAcl : List acl -> user -> Protected user route
+    , init : access -> user -> Protected user route
     }
     ->
         (user
@@ -366,23 +369,23 @@ protectWithAcl :
             , update : msg -> model -> ( model, effect )
             , view : model -> view
             , layout : (model -> view) -> model -> view
-            , acls : List acl
+            , access : access
             , subscriptions : model -> Sub msg
             }
         )
     -> Page shared route effect view model msg
-protectWithAcl options =
+protectWithAccess options =
     let
         protect toPage toRecord =
             Page
-                (\\shared req ->
+                (\shared req ->
                     case options.beforeInit shared req of
                         Provide user ->
                             let
                                 rec =
                                     user |> toRecord
                             in
-                            case options.initAcl rec.acls user of
+                            case options.init rec.access user of
                                 Provide _ ->
                                     Ok <| (rec |> toPage)
 
@@ -393,15 +396,15 @@ protectWithAcl options =
                             Err route
                 )
     in
-    protect (fromSuperAcl >> adapters.advanced)
+    protect (fromAccess >> adapters.advanced)
 
 
-fromSuperAcl :
+fromAccess :
     { init : ( model, effect )
     , update : msg -> model -> ( model, effect )
     , view : model -> view
     , layout : (model -> view) -> model -> view
-    , acls : List acl
+    , access : access
     , subscriptions : model -> Sub msg
     }
     ->
@@ -410,10 +413,10 @@ fromSuperAcl :
         , view : model -> view
         , subscriptions : model -> Sub msg
         }
-fromSuperAcl { init, update, view, layout, subscriptions } =
+fromAccess ({ init, update, view,  subscriptions } as config) =
     { init = init
     , update = update
-    , view = layout view
+    , view = config.layout view
     , subscriptions = subscriptions
     }
 
@@ -455,7 +458,7 @@ bundle :
     -> Bundle params model msg shared pagesEffect pagesModel pagesMsg pagesView
 bundle { redirecting, toRoute, toUrl, fromCmd, mapEffect, mapView, page, toModel, toMsg } =
     { init =
-        \\params shared url key ->
+        \params shared url key ->
             let
                 req =
                     Iop.Request.create (toRoute url) params url key
@@ -468,7 +471,7 @@ bundle { redirecting, toRoute, toUrl, fromCmd, mapEffect, mapView, page, toModel
                 Err route ->
                     ( redirecting.model, fromCmd <| Browser.Navigation.replaceUrl req.key (toUrl route) )
     , update =
-        \\params msg model shared url key ->
+        \params msg model shared url key ->
             let
                 req =
                     Iop.Request.create (toRoute url) params url key
@@ -481,7 +484,7 @@ bundle { redirecting, toRoute, toUrl, fromCmd, mapEffect, mapView, page, toModel
                 Err route ->
                     ( redirecting.model, fromCmd <| Browser.Navigation.replaceUrl req.key (toUrl route) )
     , view =
-        \\params model shared url key ->
+        \params model shared url key ->
             let
                 req =
                     Iop.Request.create (toRoute url) params url key
@@ -494,7 +497,7 @@ bundle { redirecting, toRoute, toUrl, fromCmd, mapEffect, mapView, page, toModel
                 Err _ ->
                     redirecting.view
     , subscriptions =
-        \\params model shared url key ->
+        \params model shared url key ->
             let
                 req =
                     Iop.Request.create (toRoute url) params url key
@@ -572,33 +575,31 @@ adapters :
     }
 adapters =
     { static =
-        \\none page ->
-            { init = \\_ -> ( (), none )
-            , update = \\_ _ -> ( (), none )
-            , view = \\_ -> page.view
-            , subscriptions = \\_ -> Sub.none
+        \none page ->
+            { init = \_ -> ( (), none )
+            , update = \_ _ -> ( (), none )
+            , view = \_ -> page.view
+            , subscriptions = \_ -> Sub.none
             }
     , sandbox =
-        \\none page ->
-            { init = \\_ -> ( page.init, none )
-            , update = \\msg model -> ( page.update msg model, none )
+        \none page ->
+            { init = \_ -> ( page.init, none )
+            , update = \msg model -> ( page.update msg model, none )
             , view = page.view
-            , subscriptions = \\_ -> Sub.none
+            , subscriptions = \_ -> Sub.none
             }
     , element =
-        \\fromCmd page ->
-            { init = \\_ -> page.init |> Tuple.mapSecond fromCmd
-            , update = \\msg model -> page.update msg model |> Tuple.mapSecond fromCmd
+        \fromCmd page ->
+            { init = \_ -> page.init |> Tuple.mapSecond fromCmd
+            , update = \msg model -> page.update msg model |> Tuple.mapSecond fromCmd
             , view = page.view
             , subscriptions = page.subscriptions
             }
     , advanced =
-        \\page ->
+        \page ->
             { init = always page.init
             , update = page.update
             , view = page.view
             , subscriptions = page.subscriptions
             }
     }
-
-`.trimLeft()

@@ -11,15 +11,15 @@ import {
 } from "./utils"
 
 export default (pages : string[][], options : Options) : string => `
-module Gen.Pages exposing (Model, Msg, init, subscriptions, update, view)
+module Iop.Gen.Pages exposing (Model, Msg, init, subscriptions, update, view)
 
 import Browser.Navigation exposing (Key)
 import Effect exposing (Effect)
 import Iop.Page
 ${paramsImports(pages)}
-import Gen.Model as Model
-import Gen.Msg as Msg
-import Gen.Route as Route exposing (Route)
+import Iop.Gen.Model as Model
+import Iop.Gen.Msg as Msg
+import Iop.Gen.Route as Route exposing (Route)
 import Page exposing (Page)
 ${pagesImports(pages)}
 import Request exposing (Request)

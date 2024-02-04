@@ -1,6 +1,6 @@
 module Pages.{{module}} exposing (page)
 
-import Gen.Params.{{module}} exposing (Params)
+import Iop.Gen.Params.{{module}} exposing (Params)
 import Page exposing (Page)
 import Request
 import Shared

@@ -1,4 +1,3 @@
-export default (): string => `
 module Request exposing
     ( Request, With
     , create
@@ -15,7 +14,7 @@ module Request exposing
 
 import Browser.Navigation exposing (Key)
 import Iop.Request as Iop
-import Gen.Route as Route exposing (Route)
+import Iop.Gen.Route as Route exposing (Route)
 import Url exposing (Url)
 
 
@@ -40,5 +39,3 @@ pushRoute route req =
 replaceRoute : Route -> With params -> Cmd msg
 replaceRoute route req =
     Browser.Navigation.replaceUrl req.key (Route.toHref route)
-
-`.trimLeft()

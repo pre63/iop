@@ -6,7 +6,7 @@ import {
 } from "./utils"
 
 export default (pages : string[][], options : Options) : string => `
-module Gen.Model exposing (Model(..))
+module Iop.Gen.Model exposing (Model(..))
 
 ${paramsImports(pages)}
 ${pagesImports(pages)}

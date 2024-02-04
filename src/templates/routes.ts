@@ -26,7 +26,7 @@ const sorter = (a: string[], b: string[]): (-1 | 1 | 0) => {
 }
 
 export default (pages: string[][], _options: Options): string => `
-module Gen.Route exposing
+module Iop.Gen.Route exposing
     ( Route(..)
     , fromUrl
     , toHref

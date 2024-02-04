@@ -5,10 +5,6 @@ import * as File from '../file'
 import { createInterface } from 'readline'
 import RouteTemplate from '../templates/routes'
 import PagesTemplate from '../templates/pages'
-import PageTemplate from '../templates/page'
-import RequestTemplate from '../templates/request'
-import IopPageTemplate from '../templates/iop/page'
-import IopRequestTemplate from '../templates/iop/request'
 import ModelTemplate from '../templates/model'
 import MsgTemplate from '../templates/msg'
 import ChildProcess from 'child_process'
@@ -21,51 +17,10 @@ const elm = require('node-elm-compiler')
 
 export const build = ({ env, runElmMake }: { env: Environment, runElmMake: boolean }) => () =>
   Promise.all([
-    createMissingDefaultFiles(),
     createMissingAddTemplates()
   ])
     .then(createGeneratedFiles)
     .then(runElmMake ? compileMainElm(env) : _ => `  ${check} ${bold}iop${reset} generated new files.`)
-
-const createMissingDefaultFiles = async () => {
-  type Action
-    = ['DELETE_FROM_DEFAULTS', string[]]
-    | ['CREATE_IN_DEFAULTS', string[]]
-    | ['DO_NOTHING', string[]]
-
-  const toAction = async (filepath: string[]): Promise<Action> => {
-    const [inDefaults, inSrc] = await Promise.all([
-      exists(path.join(config.folders.defaults.dest, ...filepath)),
-      exists(path.join(config.folders.src, ...filepath))
-    ])
-
-    if (inSrc && inDefaults) {
-      return ['DELETE_FROM_DEFAULTS', filepath]
-    } else if (!inSrc) {
-      return ['CREATE_IN_DEFAULTS', filepath]
-    } else {
-      return ['DO_NOTHING', filepath]
-    }
-  }
-
-  const actions = await Promise.all(config.defaults.map(toAction))
-
-  const performDefaultFileAction = ([action, relative]: Action): Promise<any> =>
-    action === 'CREATE_IN_DEFAULTS' ? createDefaultFile(relative)
-      : action === 'DELETE_FROM_DEFAULTS' ? deleteFromDefaults(relative)
-        : Promise.resolve()
-
-  const createDefaultFile = async (relative: string[]) =>
-    File.copyFile(
-      path.join(config.folders.defaults.src, ...relative),
-      path.join(config.folders.defaults.dest, ...relative)
-    )
-
-  const deleteFromDefaults = async (relative: string[]) =>
-    File.remove(path.join(config.folders.defaults.dest, ...relative))
-
-  return Promise.all(actions.map(performDefaultFileAction))
-}
 
 type FilepathSegments = {
   kind: PageKind,
@@ -115,18 +70,12 @@ const createGeneratedFiles = async () => {
       .map(fps => fps.kind)[0] || 'page'
 
   const paramFiles = segments.map(filepath => ({
-    filepath: ['Gen', 'Params', ...filepath],
+    filepath: [ 'Gen', 'Params', ...filepath],
     contents: ParamsTemplate(filepath, options(kindForPage))
   }))
 
   const filesToCreate = [
     ...paramFiles,
-    { filepath: ['Page'], contents: PageTemplate() },
-    { filepath: ['Request'], contents: RequestTemplate() },
-
-    { filepath: ['Iop', 'Page'], contents: IopPageTemplate() },
-    { filepath: ['Iop', 'Request'], contents: IopRequestTemplate() },
-
     { filepath: ['Gen', 'Route'], contents: RouteTemplate(segments, options(kindForPage)) },
     { filepath: ['Gen', 'Pages'], contents: PagesTemplate(segments, options(kindForPage)) },
     { filepath: ['Gen', 'Model'], contents: ModelTemplate(segments, options(kindForPage)) },
@@ -174,7 +123,7 @@ const compileMainElm = (env: Environment) => async () => {
     const isSrcMainElmDefined = await File.exists(path.join(config.folders.src, 'Main.elm'))
     const inputFilepath = isSrcMainElmDefined
       ? path.join(config.folders.src, 'Main.elm')
-      : path.join(config.folders.defaults.dest, 'Main.elm')
+      : path.join(config.folders.src, 'Main.elm')
 
     return elm.compileToString(inputFilepath, {
       output: outputFilepath,

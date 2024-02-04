@@ -1,4 +1,3 @@
-export default (): string => `
 module Iop.Request exposing (Request, create)
 
 {-|
@@ -105,7 +104,7 @@ query str =
             |> String.split "&"
             |> List.filterMap
                 (String.split "="
-                    >> (\\eq ->
+                    >> (\eq ->
                             Maybe.map2 Tuple.pair
                                 (List.head eq)
                                 (eq |> List.drop 1 |> List.head |> Maybe.withDefault "" |> Just)
@@ -113,4 +112,3 @@ query str =
                 )
             |> List.map (Tuple.mapBoth decode decode)
             |> Dict.fromList
-`.trimLeft()

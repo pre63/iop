@@ -1,6 +1,7 @@
 module Auth exposing
     ( User
     , beforeProtectedInit
+    , init
     )
 
 {-|
@@ -10,8 +11,9 @@ module Auth exposing
 
 -}
 
+import Iop.Auth as Auth
+import Iop.Gen.Route exposing (Route)
 import Iop.Page as Iop
-import Gen.Route exposing (Route)
 import Request exposing (Request)
 import Shared
 
@@ -19,7 +21,7 @@ import Shared
 {-| Replace the "()" with your actual User type
 -}
 type alias User =
-    ()
+    Auth.User
 
 
 {-| This function will run before any `protected` pages.
@@ -31,9 +33,19 @@ Here, you can provide logic on where to redirect if a user is not signed in. Her
             Iop.Provide user
 
         Nothing ->
-            Iop.RedirectTo Gen.Route.SignIn
+            Iop.RedirectTo Iop.Gen.Route.SignIn
 
 -}
 beforeProtectedInit : Shared.Model -> Request -> Iop.Protected User Route
 beforeProtectedInit shared req =
-    Iop.RedirectTo Gen.Route.NotFound
+    Iop.RedirectTo Iop.Gen.Route.NotFound
+
+
+init : Maybe a -> User -> Iop.Protected User Iop.Gen.Route.Route
+init access user =
+    case access of
+        Just _ ->
+            Iop.Provide user
+
+        Nothing ->
+            Iop.RedirectTo Iop.Gen.Route.NotFound
