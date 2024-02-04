@@ -21,6 +21,4 @@ ${bold(`iop ${cyan(`server`)}`)}  . . . . . . start a live dev server
 Other commands:
 ${bold(`iop ${cyan(`gen`)}`)} . . . . generates code without elm make
 ${bold(`iop ${cyan(`watch`)}`)} . . . .  runs iop gen as you code
-
-Visit ${green(`https://elm-spa.dev`)} for more!
 `

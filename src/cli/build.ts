@@ -19,13 +19,13 @@ import { isStandardPage, isStaticPage, isStaticView, options, PageKind } from ".
 import { createMissingAddTemplates } from "./_common"
 const elm = require('node-elm-compiler')
 
-export const build = ({ env, runElmMake } : { env : Environment, runElmMake: boolean }) => () =>
+export const build = ({ env, runElmMake }: { env: Environment, runElmMake: boolean }) => () =>
   Promise.all([
     createMissingDefaultFiles(),
     createMissingAddTemplates()
   ])
     .then(createGeneratedFiles)
-    .then(runElmMake ? compileMainElm(env): _ => `  ${check} ${bold}iop${reset} generated new files.`)
+    .then(runElmMake ? compileMainElm(env) : _ => `  ${check} ${bold}iop${reset} generated new files.`)
 
 const createMissingDefaultFiles = async () => {
   type Action
@@ -123,10 +123,10 @@ const createGeneratedFiles = async () => {
     ...paramFiles,
     { filepath: ['Page'], contents: PageTemplate() },
     { filepath: ['Request'], contents: RequestTemplate() },
-    
-    { filepath: ['Iop','Page'], contents: IopPageTemplate() },
-    { filepath: ['Iop','Request'], contents: IopRequestTemplate() },
-    
+
+    { filepath: ['Iop', 'Page'], contents: IopPageTemplate() },
+    { filepath: ['Iop', 'Request'], contents: IopRequestTemplate() },
+
     { filepath: ['Gen', 'Route'], contents: RouteTemplate(segments, options(kindForPage)) },
     { filepath: ['Gen', 'Pages'], contents: PagesTemplate(segments, options(kindForPage)) },
     { filepath: ['Gen', 'Model'], contents: ModelTemplate(segments, options(kindForPage)) },
@@ -182,28 +182,32 @@ const compileMainElm = (env: Environment) => async () => {
       debug: inDevelopment,
       optimize: inProduction,
     })
-    .catch((error: Error) => {
-      try { return colorElmError(JSON.parse(error.message.split('\n')[1])) }
-      catch {
-        const { RED, green } = colors
-        return Promise.reject([
-          `${RED}!${reset} iop failed to understand an error`,
-          `Please report the output below to ${green}https://github.com/ryannhg/iop/issues${reset}`,
-          `-----`,
-          JSON.stringify(error, null, 2),
-          `-----`,
-          `${RED}!${reset} iop failed to understand an error`,
-          `Please send the output above to ${green}https://github.com/ryannhg/iop/issues${reset}`,
-          ``
-        ].join('\n\n'))
-      }
-    })
+      .catch((error: Error) => {
+        try {
+          const err = JSON.parse(error.message.split('\n')[1])
+          return colorElmError(err)
+        }
+        catch (err) {
+          console.error(err)
+          const { RED, green } = colors
+          return Promise.reject([
+            `${RED}!${reset} iop failed to understand an error`,
+            `Please report the output below to ${green}https://github.com/pre63/iop/issues${reset}`,
+            `-----`,
+            JSON.stringify(error, null, 2),
+            `-----`,
+            `${RED}!${reset} iop failed to understand an error`,
+            `Please send the output above to ${green}https://github.com/pre63/iop/issues${reset}`,
+            ``
+          ].join('\n\n'))
+        }
+      })
   }
 
   type ElmError
     = ElmCompileError
     | ElmJsonError
-  
+
   type ElmCompileError = {
     type: 'compile-errors'
     errors: ElmProblemError[]
@@ -231,11 +235,11 @@ const compileMainElm = (env: Environment) => async () => {
     string: string
   }
 
-  const colorElmError = (output : ElmError) => {
-    const errors : ElmProblemError[] =
+  const colorElmError = (output: ElmError) => {
+    const errors: ElmProblemError[] =
       output.type === 'compile-errors'
         ? output.errors
-        : [ { path: output.path, problems: [output] } ]
+        : [{ path: output.path, problems: [output] }]
 
     const strIf = (str: string) => (cond: boolean): string => cond ? str : ''
     const boldIf = strIf(bold)
@@ -245,11 +249,14 @@ const compileMainElm = (env: Environment) => async () => {
 
     const errorToString = (error: ElmProblemError): string => {
       const problemToString = (problem: Problem): string => {
-        const path = error.path.substr(process.cwd().length + 1)
-        return [
-          `${colors.cyan}-- ${problem.title} ${repeat('-', 63 - problem.title.length - path.length)} ${path}${reset}`,
-          problem.message.map(messageToString).join('')
-        ].join('\n\n')
+        const path = error.path
+        if (!path && problem.message)
+          return problem.message.map(messageToString).join('')
+        else
+          return [
+            `${colors.cyan}-- ${problem.title} ${repeat('-', 63 - problem.title.length - path.length)} ${path}${reset}`,
+            problem.message.map(messageToString).join('')
+          ].join('\n\n')
       }
 
       const messageToString = (line: Message | string) =>
@@ -280,7 +287,7 @@ const compileMainElm = (env: Environment) => async () => {
       .then(_ => [success() + '\n'])
 }
 
-const ensureElmIsInstalled = async (environment : Environment) => {
+const ensureElmIsInstalled = async (environment: Environment) => {
   await new Promise((resolve, reject) => {
     ChildProcess.exec('elm', (err) => {
       if (err) {

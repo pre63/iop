@@ -1,15 +1,13 @@
 {
   "name": "iop",
   "version": "0.0.9",
-  "description": "single page apps made easy",
+  "description": "flexible framework for building web applications with elm",
   "bin": "dist/src/index.js",
   "scripts": {
     "start": "npm install && npm run dev",
-    "dev": "npm run build:watch & npm run test:watch",
+    "dev": "npm run build:watch",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "test": "jest",
-    "test:watch": "jest --watchAll",
     "publish:test": "npm run build && npm pack --dry-run",
     "local": "npm run publish:test && npm install -g ."
   },

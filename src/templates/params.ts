@@ -9,7 +9,6 @@ import Url.Parser as Parser exposing ((</>), Parser)
 type alias Params =
     ${routeParameters(page)}
 
-
 parser =
     ${routeParser(page)}
 
