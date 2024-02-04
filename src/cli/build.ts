@@ -7,6 +7,8 @@ import RouteTemplate from '../templates/routes'
 import PagesTemplate from '../templates/pages'
 import PageTemplate from '../templates/page'
 import RequestTemplate from '../templates/request'
+import IopPageTemplate from '../templates/iop/page'
+import IopRequestTemplate from '../templates/iop/request'
 import ModelTemplate from '../templates/model'
 import MsgTemplate from '../templates/msg'
 import ChildProcess from 'child_process'
@@ -98,7 +100,7 @@ const invalidExportsMessage = (entry: PageEntry) => {
     `  ${dot} module ${moduleName} exposing (${cyan('page')})`,
     `  ${dot} module ${moduleName} exposing (${cyan('Model')}, ${cyan('Msg')}, ${cyan('page')})`,
     ``,
-    `Visit ${colors.green}https://iop.dev/guide/03-pages${reset} for more details!`
+    `Visit ${colors.green}https://elm-spa.dev/guide/03-pages${reset} for more details!`
   ].join('\n')
 }
 
@@ -121,6 +123,10 @@ const createGeneratedFiles = async () => {
     ...paramFiles,
     { filepath: ['Page'], contents: PageTemplate() },
     { filepath: ['Request'], contents: RequestTemplate() },
+    
+    { filepath: ['Iop','Page'], contents: IopPageTemplate() },
+    { filepath: ['Iop','Request'], contents: IopRequestTemplate() },
+    
     { filepath: ['Gen', 'Route'], contents: RouteTemplate(segments, options(kindForPage)) },
     { filepath: ['Gen', 'Pages'], contents: PagesTemplate(segments, options(kindForPage)) },
     { filepath: ['Gen', 'Model'], contents: ModelTemplate(segments, options(kindForPage)) },

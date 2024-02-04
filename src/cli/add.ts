@@ -51,7 +51,7 @@ const example = '  ' + `
   ${bold(`iop ${cyan(`add`)}`)} ${yellow('/about-us')} ${pink('sandbox')}
   ${bold(`iop ${cyan(`add`)}`)} ${yellow('/people/:id')} ${pink('element')}
 
-  Visit ${green(`https://iop.dev/guide/01-cli`)} for more details!
+  Visit ${green(`https://elm-spa.dev/guide/01-cli`)} for more details!
 `.trim()
 
 const template404 = (url : string, template : string, suggestions: string[]) => {
@@ -65,6 +65,6 @@ const template404 = (url : string, template : string, suggestions: string[]) => 
   ${bold(`iop`)} couldn't find a ${bold(pink(template))} template
   in the ${cyan('.iop/templates')} folder.
   ${suggestions.length ? suggest : ''}
-  Visit ${green(`https://iop.dev/guide/01-cli`)} for more details!
+  Visit ${green(`https://elm-spa.dev/guide/01-cli`)} for more details!
 
 `.trim()}

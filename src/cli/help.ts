@@ -22,5 +22,5 @@ Other commands:
 ${bold(`iop ${cyan(`gen`)}`)} . . . . generates code without elm make
 ${bold(`iop ${cyan(`watch`)}`)} . . . .  runs iop gen as you code
 
-Visit ${green(`https://iop.dev`)} for more!
+Visit ${green(`https://elm-spa.dev`)} for more!
 `

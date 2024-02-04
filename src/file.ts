@@ -1,16 +1,49 @@
 import { promises as fs } from 'fs'
 import oldFs from 'fs'
 import path from "path"
+import crypto from 'crypto'
 
 /**
- * Create a new file, creating the containing folder if missing.
+ * Generate SHA-256 hash of content.
+ * @param contents - the content to hash
+ * @returns Hashed content as a hex string
+ */
+const generateHash = (contents: string) => {
+  return crypto.createHash('sha256').update(contents).digest('hex')
+}
+
+/**
+ * Create a new file, creating the containing folder if missing, and prepend a hash of the content.
  * @param filepath - the absolute path of the file to create
  * @param contents - the raw string contents of the file
  */
-export const create = async (filepath : string, contents : string) => {
-  await ensureFolderExists(filepath)
-  return fs.writeFile(filepath, contents, { encoding: 'utf8' })
+export const create = async (filepath: string, contents: string) => {
+  if (filepath.endsWith('.elm')) {
+    const hash = generateHash(contents)
+    const newContents = `{- ${hash} -}\n${contents}`
+
+    if (await exists(filepath)) {
+      const currentContent = await read(filepath)
+      const same = currentContent.indexOf(hash) > -1
+
+      if (!same) {
+        console.log(`Iop update: ${filepath}`)
+        await ensureFolderExists(filepath)
+        await fs.writeFile(filepath, newContents, { encoding: 'utf8' })
+      }
+    } else {
+      await ensureFolderExists(filepath)
+      console.log(`Iop init: ${filepath}`)
+      await fs.writeFile(filepath, newContents, { encoding: 'utf8' })
+    }
+  }
+  else {
+    console.log(`Iop init/update: ${filepath}`)
+    await ensureFolderExists(filepath)
+    await fs.writeFile(filepath, contents, { encoding: 'utf8' })
+  }
 }
+
 
 /**
  * Removes a file or folder at the given path.
@@ -60,11 +93,11 @@ export const exists = (filepath: string) =>
  * Copy the file or folder at the given path.
  * @param filepath - the path of the file or folder to copy
  */
-export const copy = (src : string, dest : string) => {
+export const copy = (src: string, dest: string) => {
   const exists = oldFs.existsSync(src)
   const stats = exists && oldFs.statSync(src)
   if (stats && stats.isDirectory()) {
-    try { oldFs.mkdirSync(dest, { recursive: true }) } catch (_) {}
+    try { oldFs.mkdirSync(dest, { recursive: true }) } catch (_) { }
     oldFs.readdirSync(src).forEach(child =>
       copy(path.join(src, child), path.join(dest, child))
     )
@@ -73,18 +106,18 @@ export const copy = (src : string, dest : string) => {
   }
 }
 
-export const copyFile = async (src : string, dest : string) => {
+export const copyFile = async (src: string, dest: string) => {
   await ensureFolderExists(dest)
   return fs.copyFile(src, dest)
 }
 
 
-const ensureFolderExists = async (filepath : string) => {
+const ensureFolderExists = async (filepath: string) => {
   const folder = filepath.split(path.sep).slice(0, -1).join(path.sep)
   return fs.mkdir(folder, { recursive: true })
 }
 
-export const mkdir = (folder : string) : Promise<string> =>
+export const mkdir = (folder: string): Promise<string> =>
   fs.mkdir(folder, { recursive: true })
 
 export const read = async (path: string) =>

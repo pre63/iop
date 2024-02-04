@@ -1,3 +1,4 @@
+export default (): string => `
 module Iop.Request exposing (Request, create)
 
 {-|
@@ -6,7 +7,7 @@ module Iop.Request exposing (Request, create)
 # **( These docs are for CLI contributors )**
 
 
-### If you are using **iop**, check out [the official guide](https://iop.dev/guide) instead!
+### If you are using **elm-spa**, check out [the official guide](https://elm-spa.dev/guide) instead!
 
 ---
 
@@ -19,9 +20,8 @@ current URL, route parameters, query parameters etc.
             { init = init
             , update = update
             , view = view request
-            }
-
-You can choose to pass this request into `init`,`update`, or any other function
+            }'
+You can choose to pass this request into 'init','update', or any other function
 that might need access to URL-related information.
 
 
@@ -35,8 +35,7 @@ import Browser.Navigation exposing (Key)
 import Dict exposing (Dict)
 import Url exposing (Url)
 
-
-{-| Here is an example request for the route `/people/:name`
+{-| Here is an example request for the route '/people/:name'
 
     -- /people/ryan
     req.route == Route.People__Detail_ { name = "ryan" }
@@ -106,7 +105,7 @@ query str =
             |> String.split "&"
             |> List.filterMap
                 (String.split "="
-                    >> (\eq ->
+                    >> (\\eq ->
                             Maybe.map2 Tuple.pair
                                 (List.head eq)
                                 (eq |> List.drop 1 |> List.head |> Maybe.withDefault "" |> Just)
@@ -114,3 +113,4 @@ query str =
                 )
             |> List.map (Tuple.mapBoth decode decode)
             |> Dict.fromList
+`.trimLeft()

@@ -1,6 +1,6 @@
 {
   "name": "iop",
-  "version": "0.0.1",
+  "version": "0.0.9",
   "description": "single page apps made easy",
   "bin": "dist/src/index.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "build:watch": "tsc --watch",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "publish:test": "npm run build && npm pack --dry-run"
+    "publish:test": "npm run build && npm pack --dry-run",
+    "local": "npm run publish:test && npm install -g ."
   },
   "repository": {
     "type": "git",

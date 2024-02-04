@@ -1,40 +1,59 @@
-# iop is a [![elm-spa](https://v6.elm-spa.dev/images/rounded-logo-bg.png)](https://elm-spa.dev) fork
+# iop cli
+> the command-line interface for __iop__
 
-# **Installation**
+## installation
 
 ```bash
 npm install -g iop@latest
 ```
 
-# **Quick start**
+## usage
 
-## **1. Create a new project**
+```
+$ iop help
+```
+```
+iop – version 6.0.4
 
-```bash
-npx iop new
+Commands:
+iop new . . . . . . . . .  create a new project
+iop add <url> . . . . . . . . create a new page
+iop build . . . . . . one-time production build
+iop server  . . . . . . start a live dev server
+
+Other commands:
+iop gen . . . . generates code without elm make
+iop watch . . . .  runs iop gen as you code
+
+Visit https://elm-spa.dev for more!
 ```
 
-## **2. Check out the new files**
+## learn more
+
+Check out the official guide at https://elm-spa.dev!
+
+# contributing
+
+The CLI is written with TypeScript + NodeJS. Here's how you can get started contributing:
 
 ```bash
-your-new-project/
-  - elm.json
-  - src/Pages/Home_.elm
-  - public/index.html
+git clone git@github.com:pre63/iop  # clone the repo
+cd iop/src/cli                      # enter the CLI folder
+npm start                           # run first time dev setup
 ```
-
-## **3. Run it in your browser**
 
 ```bash
-npx iop server   # Ready at http://localhost:1234
+npm run dev     # compiles as you code
+npm run build   # one-time production build
+npm run test    # run test suite
 ```
 
-# **Learn more**
+## playing with the CLI locally
 
-__Visit the official site__ at [elm-spa.dev](https://elm-spa.dev) for more examples, guides, and other documentation.
+Here's how you can make the `iop` command work with your local build of this
+repo.
 
-### **Do I need the Elm package?**
-
-If you are using elm-spa, there's no need to read the [ryannhg/elm-spa](https://package.elm-lang.org/packages/ryannhg/elm-spa/latest/) package documentation. The package only exists to constrain the CLI, and provides a few basic internal helper functions. 
-
-Check out [the official website](https://elm-spa.dev) instead!
+```bash
+npm remove -g iop   # remove any existing `iop` installs
+npm link            # make `iop` refer to our local code
+```
