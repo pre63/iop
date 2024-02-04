@@ -16,10 +16,13 @@ iop advances beyond elm-spa with developer-centric enhancements:
 
 ## Installation
 
-To get started with iop, install it globally via npm:
+To get started with iop, install it globally via github:
 
 ```bash
-npm install -g git+https://github.com/pre63/iop.git
+git clone https://github.com/pre63/iop.git
+cd iop
+npm install
+npm run local
 ```
 
 ## iop CLI
@@ -66,6 +69,7 @@ To test the `iop` command with your local build:
 
 ```bash
 npm run local
+iop help
 ```
 
 ## Fork and License Information
